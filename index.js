@@ -1,5 +1,5 @@
 const express = require("express");
-const db = require("mysql2");
+const pool = require("mysql2");
 const app = express();
 const port = 3000;
 app.use(express.json());
@@ -8,7 +8,7 @@ app.use(
     extended: true,
   })
 );
-db.createPool({
+const db = pool.createPool({
   host: "localhost",
   user: "root",
   password: "",
