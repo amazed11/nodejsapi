@@ -31,7 +31,7 @@ app.post("/login", (req, res) => {
     `select * from users where username=? and password=?`,
     [user, password],
     function (err, results, fields) {
-      if (results.length) {
+      if (results.length > 0) {
         return res.status(200).json({
           status: true,
           message: "success",
