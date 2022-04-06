@@ -13,7 +13,6 @@ const db = pool.createPool({
   user: "root",
   password: "",
   database: "ecom",
-  connectionLimit: 10,
 });
 
 if (db) {
@@ -47,13 +46,15 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  const user = req.body.email;
+  const email = req.body.email;
   const password = req.body.password;
+  const username = req.body.username;
+  const phone = req.body.phone;
   db.query(
-    `insert into users(username,password) value(?,?)`,
-    [user, password],
+    `insert into users(username,email,phone,password) value(?,?,?,?)`,
+    [email, password, username, phone],
     function (err, results, fields) {
-      if (results.length) {
+      if (results) {
         return res.status(200).json({
           status: true,
           message: "success",
