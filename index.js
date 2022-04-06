@@ -55,7 +55,7 @@ app.post("/register", (req, res) => {
     [email, password, username, phone],
     function (err, results, fields) {
       if (results) {
-        return res.status(200).json({
+        return res.status(201).json({
           status: true,
           message: "success",
         });
