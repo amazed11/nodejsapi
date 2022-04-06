@@ -27,7 +27,7 @@ app.post("/login", (req, res) => {
   const user = req.body.email;
   const password = req.body.password;
   db.query(
-    `select * from users where username=? and password=?`,
+    `select * from users where email=? and password=?`,
     [user, password],
     function (err, results, fields) {
       if (results.length > 0) {
