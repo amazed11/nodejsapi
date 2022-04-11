@@ -34,6 +34,7 @@ app.post("/login", (req, res) => {
         return res.status(200).json({
           status: true,
           message: "success",
+          data: results,
         });
       } else {
         return res.status(400).json({
