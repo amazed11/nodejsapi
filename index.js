@@ -52,7 +52,7 @@ app.post("/register", (req, res) => {
   const phone = req.body.phone;
   db.query(
     `insert into users(username,email,phone,password) value(?,?,?,?)`,
-    [email, password, username, phone],
+    [username, email, phone, password],
     function (err, results, fields) {
       if (results) {
         return res.status(201).json({
