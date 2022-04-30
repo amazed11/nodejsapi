@@ -1,5 +1,6 @@
 const express = require("express");
 const pool = require("mysql2");
+const multer = require("multer");
 const app = express();
 const port = 3000;
 app.use(express.json());
@@ -122,6 +123,54 @@ app.post("/createpets", upload.single("image"), (req, res, next) => {
 app.get("/getpets/:petname", (req, res) => {
   const category = req.params.category;
   var sql = "select * from `pets` where category=?";
+  var query = db.query(sql, [fcatname], function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: false,
+        message: "failed to get",
+      });
+    }
+    return res
+      .status(200)
+      .send({ message: "Successfully fetched.", status: true, data: result });
+  });
+});
+
+app.post("/createspecificpets", upload.single("image"), (req, res, next) => {
+  const file = req.file;
+  const breed = req.body.breed;
+  const ileft = req.body.ileft;
+  const type = req.body.type;
+
+  if (!file) {
+    return res.status(400).send({ message: "Something went wrong" });
+  }
+  //   var sql = "INSERT INTO `food`(`name`) VALUES ('" + req.file.filename + "')";
+  var sql =
+    "INSERT INTO `product`(`type`, `breed`, `ileft`,`image`) VALUES (?,?,?,?)";
+  var query = db.query(
+    sql,
+    [type, breed, ileft, file.filename],
+    function (err, result) {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({
+          status: false,
+          message: `failed to create ${type} pets`,
+        });
+      }
+      return res
+        .status(200)
+        .send({ message: `Successfully created ${type} pets.` });
+    }
+  );
+});
+
+//get all foods
+app.get("/getspecificpets/:petname", (req, res) => {
+  const category = req.params.category;
+  var sql = "select * from `product` where type=?";
   var query = db.query(sql, [fcatname], function (err, result) {
     if (err) {
       console.log(err);
