@@ -34,7 +34,7 @@ app.post("/login", (req, res) => {
         return res.status(200).json({
           status: true,
           message: "success",
-          data: results,
+          data: results[0],
         });
       } else {
         return res.status(400).json({
@@ -69,6 +69,73 @@ app.post("/register", (req, res) => {
     }
   );
 });
+
+//upload file
+// handle storage using multer
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads");
+  },
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
+    );
+  },
+});
+
+var upload = multer({ storage: storage });
+
+// handle single file upload
+app.post("/createpets", upload.single("image"), (req, res, next) => {
+  const file = req.file;
+  const breed = req.body.breed;
+  const bname = req.body.bname;
+  const price = req.body.price;
+  const category = req.body.category;
+
+  if (!file) {
+    return res.status(400).send({ message: "Something went wrong" });
+  }
+  //   var sql = "INSERT INTO `food`(`name`) VALUES ('" + req.file.filename + "')";
+  var sql =
+    "INSERT INTO `pets`(`image`, `breed`, `bname`, `price`,`category`) VALUES (?,?,?,?,?)";
+  var query = db.query(
+    sql,
+    [file.filename, breed, bname, price, category],
+    function (err, result) {
+      if (err) {
+        console.log(err);
+        return res.status(400).json({
+          status: false,
+          message: "failed to create pets",
+        });
+      }
+      return res
+        .status(200)
+        .send({ message: "Successfully created pets.", file });
+    }
+  );
+});
+
+//get all foods
+app.get("/getpets/:petname", (req, res) => {
+  const category = req.params.category;
+  var sql = "select * from `pets` where category=?";
+  var query = db.query(sql, [fcatname], function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: false,
+        message: "failed to get",
+      });
+    }
+    return res
+      .status(200)
+      .send({ message: "Successfully fetched.", status: true, data: result });
+  });
+});
+
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Pets app listening at http://localhost:${port}`);
 });
