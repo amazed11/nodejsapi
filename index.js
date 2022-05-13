@@ -188,7 +188,7 @@ app.get("/getspecificpets/:petname", (req, res) => {
 //get profile
 app.get("/getprofile/:email", (req, res) => {
   const email = req.params.email;
-  var sql = "select * from `product` where email=?";
+  var sql = "select * from `users` where email=?";
   var query = db.query(sql, [email], function (err, result) {
     if (err) {
       console.log(err);
