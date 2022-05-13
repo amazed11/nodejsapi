@@ -169,9 +169,27 @@ app.post("/createspecificpets", upload.single("image"), (req, res, next) => {
 
 //get all foods
 app.get("/getspecificpets/:petname", (req, res) => {
-  const category = req.params.category;
+  const category = req.params.petname;
   var sql = "select * from `product` where type=?";
-  var query = db.query(sql, [fcatname], function (err, result) {
+  var query = db.query(sql, [category], function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: false,
+        message: "failed to get",
+      });
+    }
+    return res
+      .status(200)
+      .send({ message: "Successfully fetched.", status: true, data: result });
+  });
+});
+
+//get profile
+app.get("/getprofile/:email", (req, res) => {
+  const email = req.params.email;
+  var sql = "select * from `product` where email=?";
+  var query = db.query(sql, [email], function (err, result) {
     if (err) {
       console.log(err);
       return res.status(400).json({
