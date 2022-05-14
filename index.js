@@ -97,16 +97,17 @@ app.post("/createpets", upload.single("image"), (req, res, next) => {
   const bname = req.body.bname;
   const price = req.body.price;
   const category = req.body.category;
+  const desc = req.body.desc;
 
   if (!file) {
     return res.status(400).send({ message: "Something went wrong" });
   }
   //   var sql = "INSERT INTO `food`(`name`) VALUES ('" + req.file.filename + "')";
   var sql =
-    "INSERT INTO `pets`(`image`, `breed`, `bname`, `price`,`category`) VALUES (?,?,?,?,?)";
+    "INSERT INTO `pets`(`image`, `breed`, `bname`, `price`,`category`,`description`) VALUES (?,?,?,?,?,?)";
   var query = db.query(
     sql,
-    [file.filename, breed, bname, price, category],
+    [file.filename, breed, bname, price, category, desc],
     function (err, result) {
       if (err) {
         console.log(err);
@@ -145,16 +146,17 @@ app.post("/createspecificpets", upload.single("image"), (req, res, next) => {
   const breed = req.body.breed;
   const ileft = req.body.ileft;
   const type = req.body.type;
+  const desc = req.body.desc;
 
   if (!file) {
     return res.status(400).send({ message: "Something went wrong" });
   }
   //   var sql = "INSERT INTO `food`(`name`) VALUES ('" + req.file.filename + "')";
   var sql =
-    "INSERT INTO `product`(`type`, `breed`, `ileft`,`image`) VALUES (?,?,?,?)";
+    "INSERT INTO `product`(`type`, `breed`, `ileft`,`image`,`description`) VALUES (?,?,?,?,?)";
   var query = db.query(
     sql,
-    [type, breed, ileft, file.filename],
+    [type, breed, ileft, file.filename, desc],
     function (err, result) {
       if (err) {
         console.log(err);
