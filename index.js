@@ -122,7 +122,7 @@ app.post("/createpets", upload.single("image"), (req, res, next) => {
 
 //get all foods
 app.get("/getpets/:petname", (req, res) => {
-  const category = req.params.category;
+  const category = req.params.petname;
   var sql = "select * from `pets` where category=?";
   var query = db.query(sql, [category], function (err, result) {
     if (err) {
