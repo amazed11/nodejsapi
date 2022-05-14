@@ -123,7 +123,7 @@ app.post("/createpets", upload.single("image"), (req, res, next) => {
 app.get("/getpets/:petname", (req, res) => {
   const category = req.params.category;
   var sql = "select * from `pets` where category=?";
-  var query = db.query(sql, [fcatname], function (err, result) {
+  var query = db.query(sql, [category], function (err, result) {
     if (err) {
       console.log(err);
       return res.status(400).json({
