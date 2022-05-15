@@ -151,7 +151,7 @@ app.post("/createspecificpets", upload.single("image"), (req, res, next) => {
   if (!file) {
     return res.status(400).send({ message: "Something went wrong" });
   }
-  //   var sql = "INSERT INTO `food`(`name`) VALUES ('" + req.file.filename + "')";
+
   var sql =
     "INSERT INTO `product`(`type`, `breed`, `ileft`,`image`,`description`) VALUES (?,?,?,?,?)";
   var query = db.query(
@@ -205,6 +205,108 @@ app.get("/getprofile/:email", (req, res) => {
     return res
       .status(200)
       .send({ message: "Successfully fetched.", status: true, data: result });
+  });
+});
+
+//cart
+app.post("/createcart", (req, res, next) => {
+  const pid = req.body.pid;
+  const qty = req.body.qty;
+
+  var sql = "INSERT INTO `cart`(`pid`, `qty`) VALUES (?,?)";
+  var query = db.query(sql, [pid, qty], function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: false,
+        message: `failed to created cart`,
+      });
+    }
+    return res.status(200).send({ message: `Successfully created cart.` });
+  });
+});
+
+app.get("/getcarts", (req, res, next) => {
+  var sql =
+    "SELECT c.id,c.qty,p.image,p.breed,p.bname,p.price,p.category,p.description  FROM `cart` as c INNER JOIN `pets` as p WHERE c.id=p.id";
+  db.query(sql, function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: false,
+        message: `failed to get cart`,
+      });
+    }
+    return res
+      .status(200)
+      .send({ message: `Successfully get cart.`, data: result });
+  });
+});
+
+//delete cart
+app.delete("/deletecart/:id", (req, res, next) => {
+  var id = req.params.id;
+  var sql = "DELETE FROM `cart` WHERE id=?";
+  db.query(sql, [id], function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: false,
+        message: `failed to delete cart`,
+      });
+    }
+    return res.status(200).send({ message: `Successfully deleted cart.` });
+  });
+});
+
+//favourites
+//cart
+app.post("/createfav", (req, res, next) => {
+  const pid = req.body.pid;
+
+  var sql = "INSERT INTO `favorite`(`pid`) VALUES (?)";
+  var query = db.query(sql, [pid], function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: false,
+        message: `failed to created favorite`,
+      });
+    }
+    return res.status(200).send({ message: `Successfully created favorite.` });
+  });
+});
+
+app.get("/getfav", (req, res, next) => {
+  var sql =
+    "SELECT f.id,p.image,p.breed,p.bname,p.price,p.category,p.description  FROM `favorite` as f INNER JOIN `pets` as p WHERE f.id=p.id";
+  db.query(sql, function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: false,
+        message: `failed to get favorite`,
+      });
+    }
+    return res
+      .status(200)
+      .send({ message: `Successfully get favorite.`, data: result });
+  });
+});
+
+//delete cart
+app.delete("/deletefav/:id", (req, res, next) => {
+  var id = req.params.id;
+  var sql = "DELETE FROM `favorite` WHERE id=?";
+  db.query(sql, [id], function (err, result) {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({
+        status: false,
+        message: `failed to delete favorite`,
+      });
+    }
+    return res.status(200).send({ message: `Successfully deleted favorite.` });
   });
 });
 
