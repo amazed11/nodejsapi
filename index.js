@@ -228,7 +228,7 @@ app.post("/createcart", (req, res, next) => {
 
 app.get("/getcarts", (req, res, next) => {
   var sql =
-    "SELECT c.id,c.qty,p.image,p.breed,p.bname,p.price,p.category,p.description  FROM `cart` as c INNER JOIN `pets` as p WHERE c.id=p.id";
+    "SELECT c.id,c.qty,p.image,p.breed,p.bname,p.price,p.category,p.description  FROM `cart` as c INNER JOIN `pets` as p WHERE c.pid=p.id";
   db.query(sql, function (err, result) {
     if (err) {
       console.log(err);
@@ -279,7 +279,7 @@ app.post("/createfav", (req, res, next) => {
 
 app.get("/getfav", (req, res, next) => {
   var sql =
-    "SELECT f.id,p.image,p.breed,p.bname,p.price,p.category,p.description  FROM `favorite` as f INNER JOIN `pets` as p WHERE f.id=p.id";
+    "SELECT f.id,p.image,p.breed,p.bname,p.price,p.category,p.description  FROM `favorite` as f INNER JOIN `pets` as p WHERE f.pid=p.id";
   db.query(sql, function (err, result) {
     if (err) {
       console.log(err);
